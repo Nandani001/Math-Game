@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: yellow;
+        }
+
+        .container {
+            width: 30%;
+            background-color: white;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border-radius: 10px;
+            margin: auto;
+            margin-top: 200px;
+        }
+
+        h3 {
+            text-align: center;
+            font-size: 25px;
+            font-weight: lighter;
+        }
+
+        .question-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: aliceblue;
+            padding: 20px 30px;
+            margin: 15px 0;
+            border-radius: 10px;
+        }
+
+        .question-box input {
+            width: 50px;
+            margin-left: 10px;
+            border: none;
+            outline: none;
+            background-color: transparent;
+            font-size: 30px;
+            /* border-radius: 10px; */
+            text-align: center;
+        }
+
+        .question-box .question-mark {
+            border-bottom: 3px solid black;
+        }
+
+        #submitBtn {
+            background-color: yellow;
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: none;
+            outline: none;
+            font-size: 20px;
+            text-transform: uppercase;
+
+            /* font-weight: bold; */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h3>Fill in the blank with correct number or operator</h3>
+        <div class="question-box">
+            <input type="text" name="" id="num1">
+            <input type="text" name="" id="operator">
+            <input type="text" name="" id="num2">
+            <input type="text" name="" id="equalSign">
+            <input type="text" name="" id="result">
+        </div>
+        <button id="submitBtn">Submit</button>
+    </div>
+
+    <script>
+        const submitBtn = document.getElementById('submitBtn');
+        const num1 = document.getElementById('num1')
+        const operator = document.getElementById('operator')
+        const num2 = document.getElementById('num2')
+        const result = document.getElementById('result')
+        const equalSign = document.getElementById('equalSign')
+        equalSign.value = '='
+
+        function generateQuestion() {
+            const randomNum1 = Math.floor(Math.random() * 10) + 1;
+            const randomNum2 = Math.floor(Math.random() * 10) + 1;
+            let randomResult;
+
+            const symbol = ['*', '+', '-'];
+            const randomOperator = symbol[Math.floor(Math.random() * symbol.length)];
+
+            if (randomOperator == '+') {
+                randomResult = randomNum1 + randomNum2;
+            } else if (randomOperator == '-') {
+                randomResult = randomNum1 - randomNum2;
+            } else {
+                randomResult = randomNum1 * randomNum2;
+            }
+
+            const randomQuestion = Math.floor(Math.random() * 4)
+            if (randomQuestion == 1) {
+                num1.value = '';
+                num1.placeholder = '?';
+                operator.value = randomOperator;
+                num2.value = randomNum2;
+                result.value = randomResult;
+            } else if (randomQuestion == 2) {
+                num1.value = randomNum1;
+                operator.value = '';
+                operator.placeholder = '?';
+                num2.value = randomNum2;
+                result.value = randomResult;
+            } else if (randomQuestion == 3) {
+                num1.value = randomNum1;
+                operator.value = randomOperator;
+                num2.value = '';
+                num2.placeholder = '?';
+                result.value = randomResult;
+            } else {
+                num1.value = randomNum1;
+                operator.value = randomOperator;
+                num2.value = randomNum2;
+                result.placeholder = '?';
+                result.value = '';
+            }
+        }
+
+        submitBtn.addEventListener('click', function checkQuestion() {
+            let n1 = parseInt(num1.value);
+            let op = operator.value;
+            let n2 = parseInt(num2.value);
+            let r = parseInt(result.value);
+
+            let correct = false;
+
+            if (num1.placeholder == '?') {
+                n1 = parseInt(result.value);
+                if (op == '+') {
+                    correct = (n1 === (r - n2));
+                } else if (op == '-') {
+                    correct = (n1 === (r + n2));
+                } else {
+                    correct = (n1 === (r / n2));
+                }
+            } else if (operator.placeholder == '?') {
+                if (op == '+') {
+                    correct = ((n1 + n2) === r);
+                } else if (op == '-') {
+                    correct = ((n1 - n2) === r);
+                } else {
+                    correct = ((n1 * n2) === r);
+                }
+            } else if (num2.placeholder == '?') {
+                n2 = parseInt(result.value);
+                if (op == '+') {
+                    correct = ((n1 + n2) === r);
+                } else if (op == '-') {
+                    correct = ((n1 - n2) === r);
+                } else {
+                    correct = ((n1 * n2) === r);
+                }
+            } else {
+                if (op == '+') {
+                    correct = ((n1 + n2) === r);
+                } else if (op == '-') {
+                    correct = ((n1 - n2) === r);
+                } else {
+                    correct = ((n1 * n2) === r);
+                }
+            }
+
+            if (correct) {
+                alert("Correct!");
+            } else {
+                alert("Incorrect.");
+            }
+            generateQuestion();
+        });
+
+        generateQuestion();
+    </script>
+</body>
+
+</html>
